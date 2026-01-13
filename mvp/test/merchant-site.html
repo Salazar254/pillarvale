@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchant Test Site</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center font-sans">
+
+    <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+        <div class="h-24 w-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Premium Sneakers</h1>
+        <p class="text-gray-500 mb-8">Limited edition, high-performance running shoes.</p>
+
+        <div class="text-4xl font-bold text-gray-900 mb-8">KES 1,000</div>
+
+        <button onclick="pay()"
+            class="w-full bg-black text-white py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition transform active:scale-95 shadow-xl">
+            Buy Now
+        </button>
+
+        <div class="mt-4 text-xs text-gray-400">Secured by PayFlow</div>
+    </div>
+
+    <!-- Integration Code -->
+    <script src="../widget/payflow-widget.js"></script>
+    <script>
+        function pay() {
+            PayFlow.checkout({
+                amount: 1000,
+                merchantId: 'test_merchant_123',
+                reference: 'order_' + Math.floor(Math.random() * 10000)
+            });
+        }
+    </script>
+
+</body>
+
+</html>
