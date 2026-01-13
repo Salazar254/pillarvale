@@ -120,7 +120,53 @@ app.post('/api/payment/initiate', async (req, res) => {
     }
 });
 
-// 2. Webhook
+// 2. Authentication (Simple API Key Check)
+app.post('/api/auth/login', (req, res) => {
+    const { apiKey } = req.body;
+
+    // Simple validation - in production, check against database
+    const validKeys = ['test_merchant_123', 'merchant_demo'];
+
+    if (validKeys.includes(apiKey)) {
+        res.json({
+            success: true,
+            message: 'Login successful',
+            merchantId: apiKey
+        });
+    } else {
+        res.status(401).json({
+            success: false,
+            message: 'Invalid API key'
+        });
+    }
+});
+
+// 3. Get All Transactions (with API Key auth)
+app.get('/api/transactions', (req, res) => {
+    const apiKey = req.headers['x-api-key'];
+
+    if (!apiKey) {
+        return res.status(401).json({ success: false, message: 'API key required' });
+    }
+
+    const allTxns = getTransactions();
+
+    // Transform to match frontend interface
+    const transactions = allTxns.map(t => ({
+        id: t.id,
+        amount: t.amount,
+        phone: t.phone,
+        status: t.status.toLowerCase() === 'complete' ? 'completed' : t.status.toLowerCase(),
+        timestamp: t.date
+    }));
+
+    res.json({
+        success: true,
+        transactions
+    });
+});
+
+// 4. Webhook
 app.post('/api/webhook/intasend', (req, res) => {
     const data = req.body;
     console.log('Webhook Received:', JSON.stringify(data, null, 2));
@@ -141,7 +187,7 @@ app.post('/api/webhook/intasend', (req, res) => {
     res.json({ received: true });
 });
 
-// 3. Get Transactions
+// 5. Get Transactions by Merchant ID
 app.get('/api/transactions/:merchantId', (req, res) => {
     const { merchantId } = req.params;
     const allTxns = getTransactions();
