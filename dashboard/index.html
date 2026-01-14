@@ -5,26 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PayFlow Merchant Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        slate: { 850: '#151e2e', 950: '#020617' }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
+    <link rel="stylesheet" href="../dist/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-blue-500 selection:text-white">
@@ -185,19 +167,26 @@
     <!-- Logic -->
     <script>
         const API_BASE = 'http://localhost:3000/api';
-        const MERCHANT_ID = 'test_merchant_123';
+        const MERCHANT_ID = localStorage.getItem('merchantId') || 'test_merchant_123';
 
         // Auth Check
         const overlay = document.getElementById('login-overlay');
         const app = document.getElementById('dashboard-app');
 
-        if (localStorage.getItem('payflow_auth')) {
+        // Check for valid auth token
+        const authToken = localStorage.getItem('authToken');
+        if (authToken) {
             showDashboard();
         }
 
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            localStorage.setItem('payflow_auth', 'true');
+            const email = document.querySelector('#login-form input[type="email"]').value;
+            const password = document.querySelector('#login-form input[type="password"]').value;
+            
+            // Simulate login
+            localStorage.setItem('authToken', 'mock_token_' + Date.now());
+            localStorage.setItem('userEmail', email);
             showDashboard();
         });
 
@@ -211,7 +200,10 @@
         }
 
         function logout() {
-            localStorage.removeItem('payflow_auth');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('merchantId');
+            localStorage.removeItem('userName');
             location.reload();
         }
 

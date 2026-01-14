@@ -78,22 +78,22 @@ export function Dashboard({ apiKey, onLogout }: DashboardProps) {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 md:p-8">
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4 md:p-8">
             <div className="max-w-7xl mx-auto space-y-6">
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+                        <h1 className="text-4xl font-bold text-white">
                             PayFlow Dashboard
                         </h1>
-                        <p className="text-slate-300 mt-1">Instant M-Pesa Settlement Platform</p>
+                        <p className="text-slate-400 mt-1">Instant M-Pesa Settlement Platform</p>
                     </div>
                     <div className="flex gap-2">
                         <Button
                             variant="outline"
                             size="icon"
                             onClick={fetchTransactions}
-                            className="border-slate-600 bg-slate-800/50 hover:bg-slate-700/50 text-white"
+                            className="border-slate-600 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400"
                             aria-label="Refresh transactions"
                         >
                             <RefreshCw className="h-4 w-4" />
@@ -101,7 +101,7 @@ export function Dashboard({ apiKey, onLogout }: DashboardProps) {
                         <Button
                             variant="outline"
                             onClick={onLogout}
-                            className="border-slate-600 bg-slate-800/50 hover:bg-slate-700/50 text-white"
+                            className="border-slate-600 bg-red-600/20 hover:bg-red-600/30 text-red-400"
                         >
                             <LogOut className="h-4 w-4 mr-2" />
                             Logout
@@ -111,19 +111,19 @@ export function Dashboard({ apiKey, onLogout }: DashboardProps) {
 
                 {/* Stats Cards */}
                 <div className="grid gap-4 md:grid-cols-3">
-                    <Card className="border-slate-700 bg-slate-800/50 backdrop-blur">
+                    <Card className="border-blue-500/30 bg-blue-500/10 backdrop-blur">
                         <CardHeader className="pb-2">
                             <CardDescription className="text-slate-300">Total Transactions</CardDescription>
                             <CardTitle className="text-3xl text-white">{stats.totalTransactions}</CardTitle>
                         </CardHeader>
                     </Card>
-                    <Card className="border-slate-700 bg-slate-800/50 backdrop-blur">
+                    <Card className="border-cyan-500/30 bg-cyan-500/10 backdrop-blur">
                         <CardHeader className="pb-2">
                             <CardDescription className="text-slate-300">Total Amount</CardDescription>
                             <CardTitle className="text-3xl text-white">{formatCurrency(stats.totalAmount)}</CardTitle>
                         </CardHeader>
                     </Card>
-                    <Card className="border-slate-700 bg-slate-800/50 backdrop-blur">
+                    <Card className="border-green-500/30 bg-green-500/10 backdrop-blur">
                         <CardHeader className="pb-2">
                             <CardDescription className="text-slate-300">Success Rate</CardDescription>
                             <CardTitle className="text-3xl text-white">
@@ -145,9 +145,6 @@ export function Dashboard({ apiKey, onLogout }: DashboardProps) {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {isLoading ? (
-                            <div className="text-center py-8 text-slate-400">Loading transactions...</div>
-                        ) : transactions.length === 0 ? (
                             <div className="text-center py-8 text-slate-400">No transactions yet</div>
                         ) : (
                             <Table>

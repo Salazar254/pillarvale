@@ -42,13 +42,21 @@ export function Login({ onLogin }: LoginProps) {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
-            <Card className="w-full max-w-md border-slate-700 bg-slate-800/50 backdrop-blur">
-                <CardHeader className="space-y-1">
-                    <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4">
+            <Card className="w-full max-w-md border-slate-700 bg-slate-900/60 backdrop-blur-sm">
+                <CardHeader className="space-y-1 text-center">
+                    <div className="flex items-center justify-center mb-4">
+                        <div className="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <CardTitle className="text-3xl font-bold text-white">
                         PayFlow
                     </CardTitle>
-                    <CardDescription className="text-center text-slate-300">
+                    <CardDescription className="text-slate-300">
                         Merchant Dashboard
                     </CardDescription>
                 </CardHeader>
@@ -65,7 +73,7 @@ export function Login({ onLogin }: LoginProps) {
                                 value={apiKey}
                                 onChange={(e) => setApiKey(e.target.value)}
                                 required
-                                className="bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-400"
+                                className="bg-slate-800/60 border-slate-600 text-white placeholder:text-slate-400 focus:ring-blue-500 focus:border-blue-500"
                                 aria-label="API Key"
                                 aria-required="true"
                             />
@@ -77,10 +85,10 @@ export function Login({ onLogin }: LoginProps) {
                         )}
                         <Button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                             disabled={isLoading}
+                            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-lg shadow-blue-600/30"
                         >
-                            {isLoading ? 'Logging in...' : 'Login'}
+                            {isLoading ? 'Signing In...' : 'Sign In'}
                         </Button>
                     </form>
                 </CardContent>

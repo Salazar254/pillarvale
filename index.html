@@ -8,8 +8,8 @@
     <meta name="description"
         content="Stop waiting 2-7 days for Paystack withdrawals. Get paid to M-Pesa in 5 seconds. No withdrawal process. Built for Kenyan businesses.">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS (compiled) -->
+    <link rel="stylesheet" href="/dist/output.css">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +19,8 @@
 
     <!-- Content Security Policy -->
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' https://cdn.tailwindcss.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:;">
+        content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:;">
+
 
     <script>
         tailwind.config = {
@@ -30,7 +31,8 @@
                     },
                     colors: {
                         slate: {
-                            950: '#020617', // Custom very dark slate
+                            850: '#151e2e',
+                            950: '#020617',
                         }
                     },
                     animation: {
@@ -54,22 +56,34 @@
     <style>
         body {
             background-color: #020617;
-            /* slate-950 */
-            color: #f8fafc;
-            /* slate-50 */
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
         }
 
         .gradient-text {
-            background: linear-gradient(to right, #818cf8, #c084fc);
+            background: linear-gradient(to right, #3b82f6, #0ea5e9);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .glass-panel {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(148, 163, 184, 0.1);
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.5);
         }
     </style>
 </head>
@@ -77,11 +91,17 @@
 <body class="antialiased selection:bg-indigo-500/30">
 
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/5">
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/5 bg-slate-950/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0 font-bold text-xl tracking-tight">
-                    <span class="text-indigo-400">Pay</span>Flow
+                    <div class="h-8 w-8 bg-blue-600 rounded flex items-center justify-center mr-2 inline-flex">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-white">PayFlow</span>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
@@ -100,7 +120,7 @@
                         Log In
                     </a>
                     <a href="#waitlist"
-                        class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-[0_0_15px_rgba(79,70,229,0.3)]">
+                        class="btn-primary px-4 py-2 rounded-lg text-sm">
                         Get Early Access
                     </a>
                 </div>
@@ -112,16 +132,16 @@
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         <!-- Background Glow -->
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
-            <div class="absolute top-20 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl mix-blend-screen">
+            <div class="absolute top-20 left-1/4 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl mix-blend-screen">
             </div>
-            <div class="absolute top-40 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl mix-blend-screen">
+            <div class="absolute top-40 right-1/4 w-96 h-96 bg-cyan-600/15 rounded-full blur-3xl mix-blend-screen">
             </div>
         </div>
 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
-            <div class="inline-flex items-center rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-sm font-medium text-indigo-300 mb-8 animate-fade-in"
+            <div class="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-sm font-medium text-blue-300 mb-8 animate-fade-in"
                 style="animation-delay: 0.1s;">
-                <span class="flex h-2 w-2 rounded-full bg-indigo-400 mr-2 animate-pulse"></span>
+                <span class="flex h-2 w-2 rounded-full bg-blue-400 mr-2 animate-pulse"></span>
                 Launching February 2026
             </div>
 
@@ -131,7 +151,7 @@
                 Not 5 Days.
             </h1>
 
-            <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-400 mb-10 animate-slide-up"
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-300 mb-10 animate-slide-up"
                 style="animation-delay: 0.3s;">
                 Stop waiting 2-7 days for Paystack or Pesapal withdrawals. PayFlow settles customer payments directly to
                 your M-Pesa instantly. No holding periods. No stuck funds.
@@ -141,12 +161,12 @@
                 <form class="email-form flex flex-col sm:flex-row gap-3" data-source="hero">
                     <div class="relative flex-grow">
                         <input type="email" name="email" required placeholder="Enter your email address"
-                            class="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                            class="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
                         <!-- Honeypot -->
                         <input type="text" name="website_hp" class="hidden" tabindex="-1" autocomplete="off">
                     </div>
                     <button type="submit"
-                        class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 px-6 rounded-lg transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] whitespace-nowrap min-h-[44px]">
+                        class="btn-primary py-3.5 px-6 rounded-lg whitespace-nowrap min-h-[44px]">
                         Join Waitlist
                     </button>
                 </form>
@@ -220,14 +240,14 @@
                 </div>
 
                 <!-- PayFlow -->
-                <div class="glass-panel rounded-2xl p-8 border-indigo-500/30 relative overflow-hidden group">
+                <div class="glass-panel rounded-2xl p-8 border-blue-500/30 relative overflow-hidden group">
                     <div
-                        class="absolute inset-0 bg-indigo-500/5 group-hover:bg-indigo-500/10 transition-colors duration-500">
+                        class="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors duration-500">
                     </div>
                     <div class="relative z-10">
                         <div class="flex items-center mb-6">
                             <div
-                                class="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 mr-4">
+                                class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 mr-4">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -280,11 +300,15 @@
     <!-- Features Section -->
     <section id="features" class="py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white sm:text-4xl">Powerful Features</h2>
+                <p class="mt-4 text-lg text-slate-400">Everything you need to get paid faster</p>
+            </div>
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Feature 1 -->
-                <div class="glass-panel p-6 rounded-xl hover:border-indigo-500/30 transition-colors duration-300">
+                <div class="glass-panel p-6 rounded-xl hover:border-blue-500/30 transition-colors duration-300">
                     <div
-                        class="w-12 h-12 bg-indigo-900/50 rounded-lg flex items-center justify-center mb-4 text-indigo-400">
+                        class="w-12 h-12 bg-blue-900/50 rounded-lg flex items-center justify-center mb-4 text-blue-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -297,9 +321,9 @@
                 </div>
 
                 <!-- Feature 2 -->
-                <div class="glass-panel p-6 rounded-xl hover:border-indigo-500/30 transition-colors duration-300">
+                <div class="glass-panel p-6 rounded-xl hover:border-blue-500/30 transition-colors duration-300">
                     <div
-                        class="w-12 h-12 bg-indigo-900/50 rounded-lg flex items-center justify-center mb-4 text-indigo-400">
+                        class="w-12 h-12 bg-blue-900/50 rounded-lg flex items-center justify-center mb-4 text-blue-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -312,9 +336,9 @@
                 </div>
 
                 <!-- Feature 3 -->
-                <div class="glass-panel p-6 rounded-xl hover:border-indigo-500/30 transition-colors duration-300">
+                <div class="glass-panel p-6 rounded-xl hover:border-blue-500/30 transition-colors duration-300">
                     <div
-                        class="w-12 h-12 bg-indigo-900/50 rounded-lg flex items-center justify-center mb-4 text-indigo-400">
+                        class="w-12 h-12 bg-blue-900/50 rounded-lg flex items-center justify-center mb-4 text-blue-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -334,7 +358,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl font-bold text-white mb-6">Simple, Honest Pricing</h2>
             <div
-                class="inline-block bg-slate-900 rounded-2xl p-8 border border-indigo-500/30 shadow-2xl shadow-indigo-500/10">
+                class="inline-block bg-slate-900 rounded-2xl p-8 border border-blue-500/30 shadow-2xl shadow-blue-500/10">
                 <span class="text-5xl font-extrabold text-white">2%</span>
                 <span class="text-slate-400 text-xl font-medium block mt-2">Flat Fee per Transaction</span>
                 <div class="w-full h-px bg-slate-800 my-6"></div>
@@ -365,7 +389,7 @@
     <!-- Bottom CTA -->
     <section id="waitlist" class="py-24 relative overflow-hidden">
         <div
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-64 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none">
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none">
         </div>
 
         <div class="relative max-w-3xl mx-auto px-4 text-center">
@@ -376,12 +400,12 @@
                 <form class="email-form flex flex-col sm:flex-row gap-3" data-source="footer">
                     <div class="relative flex-grow">
                         <input type="email" name="email" required placeholder="Enter your email address"
-                            class="w-full bg-slate-800/80 border border-slate-600 rounded-lg px-4 py-3.5 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            class="w-full bg-slate-800/80 border border-slate-600 rounded-lg px-4 py-3.5 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <!-- Honeypot -->
                         <input type="text" name="website_hp" class="hidden" tabindex="-1" autocomplete="off">
                     </div>
                     <button type="submit"
-                        class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 px-6 rounded-lg transition-all shadow-lg hover:shadow-indigo-500/25 whitespace-nowrap min-h-[44px]">
+                        class="btn-primary py-3.5 px-6 rounded-lg whitespace-nowrap min-h-[44px]">
                         Join Waitlist
                     </button>
                 </form>
@@ -394,16 +418,22 @@
     <footer class="border-t border-white/5 py-12 bg-slate-950">
         <div
             class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-xl font-bold tracking-tight">
-                <span class="text-indigo-400">Pay</span>Flow
+            <div class="text-xl font-bold tracking-tight flex items-center">
+                <div class="h-8 w-8 bg-blue-600 rounded flex items-center justify-center mr-2">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <span class="text-white">PayFlow</span>
             </div>
             <div class="text-slate-500 text-sm">
                 &copy; 2026 PayFlow Kenya. All rights reserved.
             </div>
             <div class="flex space-x-6 text-slate-400">
-                <a href="#" class="hover:text-indigo-400 transition-colors">Privacy</a>
-                <a href="#" class="hover:text-indigo-400 transition-colors">Terms</a>
-                <a href="#" class="hover:text-indigo-400 transition-colors">Contact</a>
+                <a href="#" class="hover:text-blue-400 transition-colors">Privacy</a>
+                <a href="#" class="hover:text-blue-400 transition-colors">Terms</a>
+                <a href="#" class="hover:text-blue-400 transition-colors">Contact</a>
             </div>
         </div>
     </footer>

@@ -196,5 +196,86 @@ app.get('/api/transactions/:merchantId', (req, res) => {
     res.json(merchantTxns);
 });
 
+// 6. User Login
+app.post('/api/login', (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: 'Email and password required' });
+        }
+
+        // Mock authentication (replace with real DB lookup)
+        console.log(`Login attempt for ${email}`);
+
+        // For demo: accept any email/password
+        const token = 'auth_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        
+        res.json({
+            success: true,
+            token,
+            merchantId: 'test_merchant_123',
+            message: 'Login successful'
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 7. User Registration
+app.post('/api/register', (req, res) => {
+    try {
+        const { name, business, email, phone, password } = req.body;
+
+        if (!name || !business || !email || !phone || !password) {
+            return res.status(400).json({ success: false, message: 'All fields required' });
+        }
+
+        // Validate password strength
+        if (password.length < 8) {
+            return res.status(400).json({ success: false, message: 'Password must be at least 8 characters' });
+        }
+
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            return res.status(400).json({ success: false, message: 'Password must contain a special character' });
+        }
+
+        console.log(`New registration: ${name} (${business}) - ${email}`);
+
+        // Mock user creation (replace with real DB insert)
+        const token = 'auth_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        const merchantId = 'merchant_' + Date.now();
+
+        res.json({
+            success: true,
+            token,
+            merchantId,
+            message: 'Account created successfully'
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// 8. Verify Token
+app.get('/api/verify', (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ success: false, message: 'No token provided' });
+    }
+
+    // Mock token verification
+    if (token.startsWith('auth_')) {
+        res.json({
+            success: true,
+            valid: true,
+            merchantId: 'test_merchant_123'
+        });
+    } else {
+        res.status(401).json({ success: false, valid: false, message: 'Invalid token' });
+    }
+});
+
 const PORT = 3000;
 app.listen(PORT, () => console.log(`PayFlow API running on port ${PORT}`));
