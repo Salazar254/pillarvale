@@ -61,6 +61,7 @@ export function Dashboard({ apiKey, onLogout }: DashboardProps) {
         fetchTransactions()
         const interval = setInterval(fetchTransactions, 5000) // Poll every 5 seconds
         return () => clearInterval(interval)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [apiKey])
 
     const formatCurrency = (amount: number) => {
@@ -145,6 +146,9 @@ export function Dashboard({ apiKey, onLogout }: DashboardProps) {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
+                        {isLoading ? (
+                            <div className="text-center py-8 text-slate-400">Loading transactions...</div>
+                        ) : transactions.length === 0 ? (
                             <div className="text-center py-8 text-slate-400">No transactions yet</div>
                         ) : (
                             <Table>

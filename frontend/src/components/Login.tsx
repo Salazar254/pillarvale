@@ -34,8 +34,9 @@ export function Login({ onLogin }: LoginProps) {
             } else {
                 setError(data.message || 'Invalid API key')
             }
-        } catch (err) {
+        } catch (error) {
             setError('Failed to connect to server')
+            console.error('Login failed:', error)
         } finally {
             setIsLoading(false)
         }
