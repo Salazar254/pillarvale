@@ -13,11 +13,7 @@ COPY . .
 RUN npm run build
 
 # Expose port
-EXPOSE 3005
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:3005/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+EXPOSE 3000
 
 # Start service
 CMD ["node", "dist/index.js"]
