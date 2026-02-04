@@ -162,10 +162,39 @@ async function processPendingActions() {
 }
 
 async function start() {
-    await startEventListener();
-    processPendingActions();
-    logger.info('Lock Manager Service is running...');
+    try {
+        // Test database connection
+        await db.query('SELECT NOW()');
+        logger.info('✅ Database connected');
+
+        // Test blockchain connection
+        const blockNumber = await provider.getBlockNumber();
+        logger.info(`✅ Base L2 connected (block: ${blockNumber})`);
+
+        await startEventListener();
+        processPendingActions();
+        logger.info('🚀 Lock Manager Service is running...');
+    } catch (err) {
+        logger.error('Failed to initialize Lock Manager:', err);
+        process.exit(1);
+    }
 }
+
+// Graceful shutdown handler
+async function gracefulShutdown(signal: string) {
+    logger.info(`${signal} received, shutting down gracefully...`);
+    try {
+        await db.end();
+        logger.info('Database connection closed');
+        process.exit(0);
+    } catch (err) {
+        logger.error('Error during shutdown:', err);
+        process.exit(1);
+    }
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 start().catch(err => {
     logger.error('Lock Manager Fatal Error:', err);

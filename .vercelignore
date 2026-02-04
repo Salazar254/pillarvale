@@ -1,0 +1,10 @@
+# Vercel Ignore File
+# Ignore backend code to prevent unnecessary builds and deployment of smart contracts
+
+backend/
+docs/
+docker-compose.yml
+.env.example
+*.md
+.qoder/
+.git/

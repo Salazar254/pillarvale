@@ -7,6 +7,14 @@ import { logger } from '../utils/logger';
 
 const router = Router();
 
+// Ensure JWT_SECRET is properly configured
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRY = process.env.JWT_EXPIRY || '7d';
+
+if (!JWT_SECRET) {
+    throw new Error('FATAL: JWT_SECRET environment variable is not set. Server cannot start.');
+}
+
 // Validation schemas
 const registerSchema = z.object({
     email: z.string().email(),
@@ -56,8 +64,8 @@ router.post('/register', async (req: Request, res: Response) => {
         // Generate JWT
         const token = jwt.sign(
             { userId: user.user_id, email: user.email },
-            process.env.JWT_SECRET || 'your-secret-key',
-            { expiresIn: '30d' }
+            JWT_SECRET,
+            { expiresIn: JWT_EXPIRY }
         );
 
         logger.info(`User registered: ${user.email}`);
@@ -141,8 +149,8 @@ router.post('/login', async (req: Request, res: Response) => {
         // Generate JWT
         const token = jwt.sign(
             { userId: user.user_id, email: user.email },
-            process.env.JWT_SECRET || 'your-secret-key',
-            { expiresIn: '30d' }
+            JWT_SECRET,
+            { expiresIn: JWT_EXPIRY }
         );
 
         logger.info(`User logged in: ${user.email}`);
@@ -189,7 +197,7 @@ router.get('/verify', async (req: Request, res: Response) => {
 
         const decoded = jwt.verify(
             token,
-            process.env.JWT_SECRET || 'your-secret-key'
+            JWT_SECRET
         ) as { userId: string; email: string };
 
         // Get user details

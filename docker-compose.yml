@@ -17,7 +17,7 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/migrations:/docker-entrypoint-initdb.d
+      - ./backend/database/migrations:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -48,7 +48,7 @@ services:
 
   api-gateway:
     build:
-      context: ./services/api-gateway
+      context: ./backend/services/api-gateway
       dockerfile: Dockerfile
     container_name: fx-api-gateway
     ports:
@@ -75,7 +75,7 @@ services:
 
   rate-engine:
     build:
-      context: ./services/rate-engine
+      context: ./backend/services/rate-engine
       dockerfile: Dockerfile
     container_name: fx-rate-engine
     environment:
@@ -98,7 +98,7 @@ services:
 
   lock-manager:
     build:
-      context: ./services/lock-manager
+      context: ./backend/services/lock-manager
       dockerfile: Dockerfile
     container_name: fx-lock-manager
     environment:
@@ -119,7 +119,7 @@ services:
 
   aave-manager:
     build:
-      context: ./services/aave-manager
+      context: ./backend/services/aave-manager
       dockerfile: Dockerfile
     container_name: fx-aave-manager
     environment:
@@ -141,7 +141,7 @@ services:
 
   binance-integration:
     build:
-      context: ./services/binance-integration
+      context: ./backend/services/binance-integration
       dockerfile: Dockerfile
     container_name: fx-binance
     environment:
@@ -162,7 +162,7 @@ services:
 
   xrp-settlement:
     build:
-      context: ./services/xrp-settlement
+      context: ./backend/services/xrp-settlement
       dockerfile: Dockerfile
     container_name: fx-xrp-settlement
     environment:
@@ -182,7 +182,7 @@ services:
 
   mpesa-service:
     build:
-      context: ./services/mpesa-service
+      context: ./backend/services/mpesa-service
       dockerfile: Dockerfile
     container_name: fx-mpesa
     ports:
@@ -208,7 +208,7 @@ services:
 
   circuit-breaker:
     build:
-      context: ./services/circuit-breaker
+      context: ./backend/services/circuit-breaker
       dockerfile: Dockerfile
     container_name: fx-circuit-breaker
     environment:
@@ -230,7 +230,7 @@ services:
 
   notification-service:
     build:
-      context: ./services/notification-service
+      context: ./backend/services/notification-service
       dockerfile: Dockerfile
     container_name: fx-notifications
     environment:

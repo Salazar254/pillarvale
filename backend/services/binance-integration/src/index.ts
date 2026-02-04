@@ -165,5 +165,43 @@ async function monitorActions() {
     }
 }
 
-monitorActions();
-logger.info('Binance Integration service started');
+/**
+ * Main startup function
+ */
+async function start() {
+    try {
+        // Test database connection
+        await db.query('SELECT NOW()');
+        logger.info('✅ Database connected');
+
+        // Verify Binance API credentials
+        if (!API_KEY || !API_SECRET) {
+            logger.warn('⚠️ Binance API credentials not configured - running in read-only mode');
+        }
+
+        // Start monitoring loop
+        monitorActions();
+        logger.info('🚀 Binance Integration service started');
+    } catch (err) {
+        logger.error('❌ Failed to start Binance Integration:', err);
+        process.exit(1);
+    }
+}
+
+// Graceful shutdown handler
+async function gracefulShutdown(signal: string) {
+    logger.info(`${signal} received, shutting down gracefully...`);
+    try {
+        await db.end();
+        logger.info('Database connection closed');
+        process.exit(0);
+    } catch (err) {
+        logger.error('Error during shutdown:', err);
+        process.exit(1);
+    }
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+start();

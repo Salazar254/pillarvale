@@ -1,9 +1,9 @@
 import { Router, Response } from 'express';
 import { z } from 'zod';
-import { db } from '../server';
+import axios from 'axios';
+import { db, redisClient } from '../server';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { logger } from '../utils/logger';
-// ethers removed as it was unused in this route
 
 const router = Router();
 
@@ -73,55 +73,66 @@ router.post('/create', authenticate, async (req: AuthRequest, res: Response) => 
 
         const expiresAt = new Date(Date.now() + lockDurations[lockType as keyof typeof lockDurations]);
 
-        // Create lock in database
-        const result = await db.query(
-            `INSERT INTO locks (
-        user_id, usd_amount, kes_required, locked_rate, 
-        lock_type, status, expires_at, quote_id, 
-        bank_rate, savings_amount
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-      RETURNING lock_id, created_at`,
-            [
-                userId,
-                usdAmount,
-                quoteData.kesRequired,
-                quoteData.quotedRate,
-                lockType,
-                'pending', // Will be 'active' after blockchain confirmation
-                expiresAt,
-                quoteId,
-                131.0, // Bank rate
-                quoteData.savings.vsBank,
-            ]
-        );
+        // Use a database transaction to ensure atomicity
+        const client = await db.connect();
+        try {
+            await client.query('BEGIN');
 
-        const lock = result.rows[0];
+            // Create lock in database with 'pending' status
+            const result = await client.query(
+                `INSERT INTO locks (
+            user_id, usd_amount, kes_required, locked_rate, 
+            lock_type, status, expires_at, quote_id, 
+            bank_rate, savings_amount
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+          RETURNING lock_id, created_at`,
+                [
+                    userId,
+                    usdAmount,
+                    quoteData.kesRequired,
+                    quoteData.quotedRate,
+                    lockType,
+                    'pending', // Will be 'active' after blockchain confirmation
+                    expiresAt,
+                    quoteId,
+                    131.0, // Bank rate
+                    quoteData.savings.vsBank,
+                ]
+            );
 
-        // TODO: Call smart contract to create lock on-chain
-        // This would be done by the lock-manager service
-        // For now, we'll mark it as active immediately
+            const lock = result.rows[0];
 
-        await db.query(
-            'UPDATE locks SET status = $1 WHERE lock_id = $2',
-            ['active', lock.lock_id]
-        );
+            // Mark as active (in production, this would wait for blockchain confirmation
+            // via the lock-manager service, but we update here for immediate user feedback)
+            await client.query(
+                'UPDATE locks SET status = $1 WHERE lock_id = $2',
+                ['active', lock.lock_id]
+            );
 
-        logger.info(`Lock created: ${lock.lock_id} by user ${userId}`);
+            await client.query('COMMIT');
 
-        res.status(201).json({
-            success: true,
-            data: {
-                lockId: lock.lock_id,
-                usdAmount,
-                kesRequired: quoteData.kesRequired,
-                lockedRate: quoteData.quotedRate,
-                lockType,
-                status: 'active',
-                createdAt: lock.created_at,
-                expiresAt,
-                savings: quoteData.savings,
-            },
-        });
+            logger.info(`Lock created: ${lock.lock_id} by user ${userId}`);
+
+            res.status(201).json({
+                success: true,
+                data: {
+                    lockId: lock.lock_id,
+                    usdAmount,
+                    kesRequired: quoteData.kesRequired,
+                    lockedRate: quoteData.quotedRate,
+                    lockType,
+                    status: 'active',
+                    createdAt: lock.created_at,
+                    expiresAt,
+                    savings: quoteData.savings,
+                },
+            });
+        } catch (txError) {
+            await client.query('ROLLBACK');
+            throw txError;
+        } finally {
+            client.release();
+        }
     } catch (error) {
         if (error instanceof z.ZodError) {
             return res.status(400).json({
@@ -211,7 +222,10 @@ router.get('/user/:userId', authenticate, async (req: AuthRequest, res: Response
             });
         }
 
-        const { status, limit = 50, offset = 0 } = req.query;
+        const { status } = req.query;
+        // Sanitize and validate limit/offset to prevent SQL injection
+        const limit = Math.min(Math.max(1, parseInt(req.query.limit as string) || 50), 100);
+        const offset = Math.max(0, parseInt(req.query.offset as string) || 0);
 
         let query = `
       SELECT 
@@ -223,7 +237,7 @@ router.get('/user/:userId', authenticate, async (req: AuthRequest, res: Response
 
         const params: any[] = [userId];
 
-        if (status) {
+        if (status && ['pending', 'active', 'executed', 'cancelled', 'expired'].includes(status as string)) {
             query += ` AND l.status = $${params.length + 1}`;
             params.push(status);
         }
@@ -250,8 +264,8 @@ router.get('/user/:userId', authenticate, async (req: AuthRequest, res: Response
                     savings: parseFloat(lock.savings_amount),
                 })),
                 pagination: {
-                    limit: parseInt(limit as string),
-                    offset: parseInt(offset as string),
+                    limit,
+                    offset,
                     total: result.rowCount,
                 },
             },
@@ -312,22 +326,41 @@ router.post('/:lockId/execute', authenticate, async (req: AuthRequest, res: Resp
             });
         }
 
-        // TODO: Initiate M-Pesa STK Push
-        // This would call the mpesa-service
-        // For now, return success with instructions
-
-        logger.info(`Lock execution initiated: ${lockId}`);
-
-        res.json({
-            success: true,
-            message: 'M-Pesa payment initiated',
-            data: {
+        // Initiate M-Pesa STK Push via mpesa-service
+        const mpesaServiceUrl = process.env.MPESA_SERVICE_URL || 'http://localhost:3001';
+        
+        try {
+            const mpesaResponse = await axios.post(`${mpesaServiceUrl}/api/v1/mpesa/initiate`, {
                 lockId,
-                amount: parseFloat(lock.kes_required),
                 phoneNumber,
-                instructions: 'Please check your phone for M-Pesa prompt',
-            },
-        });
+                amount: parseFloat(lock.kes_required),
+            }, {
+                timeout: 30000,
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            logger.info(`Lock execution initiated: ${lockId}`);
+
+            res.json({
+                success: true,
+                message: 'M-Pesa payment initiated',
+                data: {
+                    lockId,
+                    amount: parseFloat(lock.kes_required),
+                    phoneNumber,
+                    merchantRequestId: mpesaResponse.data.data?.merchantRequestId,
+                    checkoutRequestId: mpesaResponse.data.data?.checkoutRequestId,
+                    instructions: 'Please check your phone for M-Pesa prompt',
+                },
+            });
+        } catch (mpesaError: any) {
+            logger.error('M-Pesa initiation failed:', mpesaError.response?.data || mpesaError.message);
+            return res.status(502).json({
+                success: false,
+                error: 'Payment service unavailable',
+                message: 'Failed to initiate M-Pesa payment. Please try again.',
+            });
+        }
     } catch (error: any) {
         logger.error('Error executing lock:', error);
         res.status(500).json({

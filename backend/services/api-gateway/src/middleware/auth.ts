@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
+// Ensure JWT_SECRET is configured
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    throw new Error('FATAL: JWT_SECRET environment variable is not set.');
+}
+
 export interface AuthRequest extends Request {
     userId?: string;
     email?: string;
@@ -23,7 +29,7 @@ export const authenticate = (
 
         const decoded = jwt.verify(
             token,
-            process.env.JWT_SECRET || 'your-secret-key'
+            JWT_SECRET
         ) as { userId: string; email: string };
 
         req.userId = decoded.userId;
