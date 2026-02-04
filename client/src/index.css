@@ -1,35 +1,50 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #0a2463;
-  --color-secondary: #f4a127;
-  --color-accent: #00a896;
+  --color-primary: #0A2463;
+  --color-secondary: #F4A127;
+  --color-accent-green: #22C55E;
+  --color-accent-orange: #FB923C;
 
-  --color-dark-900: #0F172A;
-  --color-dark-800: #1E293B;
-  --color-dark-700: #334155;
+  --color-slate-900: #020617;
+  --color-slate-800: #0F172A;
 
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
-  --background-image-glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-  --background-image-hero-pattern: url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop');
+  --background-image-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+  --background-image-hero: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop');
 }
 
 body {
-  @apply bg-slate-900 text-white font-sans antialiased;
+  @apply bg-[#020617] text-white font-sans antialiased selection:bg-primary/30;
 }
 
-
 @layer utilities {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-[2rem];
+  }
+
   .glass-card {
-    @apply bg-white/10 backdrop-blur-lg border border-white/10 shadow-xl rounded-2xl;
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl rounded-2xl p-6 transition-all duration-300 hover:border-white/20;
   }
 
   .glass-input {
-    @apply bg-black/20 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 backdrop-blur-sm;
+    @apply bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:bg-white/10 transition-all;
   }
 
-  .glass-button {
-    @apply bg-primary hover:bg-primary/90 text-white font-bold py-2 px-6 rounded-lg transition-all shadow-lg hover:shadow-primary/25 active:scale-95;
+  .btn-primary {
+    @apply bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-8 rounded-xl transition-all shadow-lg hover:shadow-primary/20 active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply bg-white/10 hover:bg-white/15 text-white font-semibold py-3 px-8 rounded-xl transition-all border border-white/10 active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-secondary to-accent-orange bg-clip-text text-transparent;
+  }
+
+  .text-gradient-green {
+    @apply bg-gradient-to-r from-accent-green to-emerald-400 bg-clip-text text-transparent;
   }
 }
