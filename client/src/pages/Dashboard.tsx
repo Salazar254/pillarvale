@@ -1,30 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useUser, useClerk } from '@clerk/clerk-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Globe, LogOut, TrendingUp, Wallet, History, ArrowRight } from 'lucide-react';
+import { useEffect } from 'react';
 
 const Dashboard = () => {
+    const { user, isLoaded, isSignedIn } = useUser();
+    const { signOut } = useClerk();
     const navigate = useNavigate();
-    const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const userData = localStorage.getItem('user');
-        
-        if (!token || !userData) {
+        if (isLoaded && !isSignedIn) {
             navigate('/login');
-            return;
         }
-        
-        setUser(JSON.parse(userData));
-    }, [navigate]);
+    }, [isLoaded, isSignedIn, navigate]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+    if (!isLoaded || !isSignedIn) return null;
+
+    const handleLogout = async () => {
+        await signOut();
         navigate('/');
     };
-
-    if (!user) return null;
 
     return (
         <div className="min-h-screen bg-slate-900">
@@ -38,7 +33,7 @@ const Dashboard = () => {
                         <span className="text-2xl font-bold text-white">PILLAR<span className="text-primary">VALE</span></span>
                     </Link>
                     <div className="flex items-center gap-4">
-                        <span className="text-gray-300">{user.email}</span>
+                        <span className="text-gray-300">{user?.primaryEmailAddress?.emailAddress}</span>
                         <button onClick={handleLogout} className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                             <LogOut className="w-5 h-5" />
                             Logout
@@ -51,7 +46,7 @@ const Dashboard = () => {
             <div className="pt-24 pb-12 px-4">
                 <div className="max-w-7xl mx-auto">
                     <h1 className="text-4xl font-bold text-white mb-2">Dashboard</h1>
-                    <p className="text-gray-400 mb-8">Welcome back, {user.name || user.email}</p>
+                    <p className="text-gray-400 mb-8">Welcome back, {user?.firstName || user?.username || 'User'}</p>
 
                     {/* Stats Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -102,7 +97,7 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Recent Activity */}
+                    {/* Recent activity */}
                     <div className="glass-card p-6">
                         <h2 className="text-xl font-bold text-white mb-4">Recent Activity</h2>
                         <p className="text-gray-400">No recent activity. Start your first trade to see it here.</p>
