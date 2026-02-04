@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const Register = () => {
     const navigate = useNavigate();
+    const [accountType, setAccountType] = useState<'business' | 'personal'>('business');
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -36,7 +37,7 @@ const Register = () => {
         const newErrors: Record<string, string> = {};
         if (!formData.name) newErrors.name = 'Name is required';
         if (!formData.email) newErrors.email = 'Email is required';
-        if (!formData.company) newErrors.company = 'Company name is required';
+        if (accountType === 'business' && !formData.company) newErrors.company = 'Company name is required';
         if (!formData.password) newErrors.password = 'Password is required';
         if (!isPasswordValid) newErrors.password = 'Password does not meet requirements';
         if (formData.password !== formData.confirmPassword) {
@@ -53,7 +54,7 @@ const Register = () => {
             const response = await axios.post('http://localhost:3000/api/auth/register', {
                 name: formData.name,
                 email: formData.email,
-                company: formData.company,
+                company: accountType === 'business' ? formData.company : 'Personal Account',
                 password: formData.password
             });
 
@@ -89,6 +90,30 @@ const Register = () => {
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
                         <p className="text-gray-400">Join the future of global trade finance</p>
+                    </div>
+
+                    {/* Account Type Toggle */}
+                    <div className="bg-white/5 p-1 rounded-lg flex mb-6">
+                        <button
+                            type="button"
+                            className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${accountType === 'business'
+                                    ? 'bg-primary text-white shadow-lg'
+                                    : 'text-gray-400 hover:text-white'
+                                }`}
+                            onClick={() => setAccountType('business')}
+                        >
+                            Business
+                        </button>
+                        <button
+                            type="button"
+                            className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${accountType === 'personal'
+                                    ? 'bg-primary text-white shadow-lg'
+                                    : 'text-gray-400 hover:text-white'
+                                }`}
+                            onClick={() => setAccountType('personal')}
+                        >
+                            Personal
+                        </button>
                     </div>
 
                     {apiError && (
@@ -134,23 +159,25 @@ const Register = () => {
                             {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
                         </div>
 
-                        {/* Company */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
-                                Company Name
-                            </label>
-                            <div className="relative">
-                                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input
-                                    type="text"
-                                    value={formData.company}
-                                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                                    className="glass-input w-full pl-11"
-                                    placeholder="Acme Ltd"
-                                />
+                        {/* Company (Conditional) */}
+                        {accountType === 'business' && (
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">
+                                    Company Name
+                                </label>
+                                <div className="relative">
+                                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        value={formData.company}
+                                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                                        className="glass-input w-full pl-11"
+                                        placeholder="Acme Ltd"
+                                    />
+                                </div>
+                                {errors.company && <p className="text-red-400 text-xs mt-1">{errors.company}</p>}
                             </div>
-                            {errors.company && <p className="text-red-400 text-xs mt-1">{errors.company}</p>}
-                        </div>
+                        )}
 
                         {/* Password */}
                         <div>

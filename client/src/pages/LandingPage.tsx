@@ -1,13 +1,8 @@
-import { useState } from 'react';
 import Navbar from '../components/Navbar';
-import { ArrowRight, Globe, Shield, Zap } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
-    const [quoteAmount, setQuoteAmount] = useState('5000');
-    const rate = 127.00;
-    const sourceAmount = parseFloat(quoteAmount) || 0;
-    const received = sourceAmount * rate;
 
     return (
         <div className="min-h-screen bg-slate-900 bg-hero-pattern bg-cover bg-fixed">

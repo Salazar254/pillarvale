@@ -153,17 +153,7 @@ const Login = () => {
                     </div>
                 </div>
 
-                {/* Trust Badge */}
-                <div className="mt-6 text-center">
-                    <div className="inline-flex items-center gap-2 text-sm text-gray-500">
-                        <div className="flex -space-x-2">
-                            <div className="w-6 h-6 rounded-full bg-gray-500 border-2 border-slate-900"></div>
-                            <div className="w-6 h-6 rounded-full bg-gray-400 border-2 border-slate-900"></div>
-                            <div className="w-6 h-6 rounded-full bg-gray-300 border-2 border-slate-900 flex items-center justify-center text-xs font-bold text-slate-800">+2k</div>
-                        </div>
-                        <p>Trusted by 2,000+ businesses</p>
-                    </div>
-                </div>
+                {/* Trust Badge Removed */}
             </div>
         </div>
     );
