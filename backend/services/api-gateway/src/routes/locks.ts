@@ -113,9 +113,10 @@ router.post('/create', authenticate, async (req: AuthRequest, res: Response) => 
 
             logger.info(`Lock created: ${lock.lock_id} by user ${userId}`);
 
-            res.status(201).json({
+            return res.status(201).json({
                 success: true,
-                data: {
+                message: 'Lock created successfully',
+                lock: {
                     lockId: lock.lock_id,
                     usdAmount,
                     kesRequired: quoteData.kesRequired,
@@ -143,7 +144,7 @@ router.post('/create', authenticate, async (req: AuthRequest, res: Response) => 
         }
 
         logger.error('Error creating lock:', error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             error: 'Internal server error',
             message: 'Failed to create lock',

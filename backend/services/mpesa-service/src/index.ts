@@ -189,7 +189,7 @@ app.post('/api/v1/mpesa/initiate', async (req: Request, res: Response) => {
             [stkResponse.CheckoutRequestID, lockId]
         );
 
-        res.json({
+        return res.json({
             success: true,
             message: 'Payment request sent to your phone',
             data: {
@@ -201,7 +201,7 @@ app.post('/api/v1/mpesa/initiate', async (req: Request, res: Response) => {
         });
     } catch (error: any) {
         console.error('Error initiating payment:', error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             error: 'Failed to initiate payment',
             message: error.message,
@@ -287,16 +287,16 @@ app.post('/webhooks/mpesa/callback', async (req: Request, res: Response) => {
             });
         }
 
-        res.status(200).send('OK');
+        return res.status(200).send('OK');
     } catch (error) {
         console.error('Error processing M-Pesa callback:', error);
-        res.status(200).send('OK'); // Always return 200 to M-Pesa
+        return res.status(200).send('OK'); // Always return 200 to M-Pesa
     }
 });
 
 // Health check
-app.get('/health', (req: Request, res: Response) => {
-    res.json({
+app.get('/health', (_req: Request, res: Response) => {
+    return res.json({
         status: 'ok',
         service: 'mpesa-service',
         timestamp: new Date().toISOString(),
