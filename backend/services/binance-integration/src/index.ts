@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import winston from 'winston';
+import express from 'express';
 
 dotenv.config();
 
@@ -181,6 +182,12 @@ async function start() {
 
         // Start monitoring loop
         monitorActions();
+
+        // Start health check server
+        const app = express();
+        app.get('/health', (_req: any, res: any) => res.json({ status: 'ok', service: 'binance-integration' }));
+        app.listen(3000, () => logger.info('🏥 Health check server running on port 3000'));
+
         logger.info('🚀 Binance Integration service started');
     } catch (err) {
         logger.error('❌ Failed to start Binance Integration:', err);

@@ -1,16 +1,27 @@
-﻿FROM node:20-alpine
+﻿# Build Stage
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies
+# Install all dependencies (including devDependencies for build)
 COPY package*.json ./
 RUN npm install
 
-# Copy source code
+# Copy source and build
 COPY . .
-
-# Build TypeScript
 RUN npm run build
+
+# Production Stage
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install only production dependencies
+COPY package*.json ./
+RUN npm install --omit=dev
+
+# Copy built assets from builder
+COPY --from=builder /app/dist ./dist
 
 # Expose port
 EXPOSE 3004

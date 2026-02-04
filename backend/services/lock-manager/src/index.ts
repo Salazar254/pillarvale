@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import winston from 'winston';
+import express from 'express';
 
 dotenv.config();
 
@@ -170,6 +171,11 @@ async function start() {
         // Test blockchain connection
         const blockNumber = await provider.getBlockNumber();
         logger.info(`✅ Base L2 connected (block: ${blockNumber})`);
+
+        // Start health check server
+        const app = express();
+        app.get('/health', (_req: any, res: any) => res.json({ status: 'ok', service: 'lock-manager' }));
+        app.listen(3000, () => logger.info('🏥 Health check server running on port 3000'));
 
         await startEventListener();
         processPendingActions();

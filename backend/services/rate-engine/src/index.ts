@@ -2,6 +2,7 @@ import { createClient } from 'redis';
 import { Pool } from 'pg';
 import { ethers } from 'ethers';
 import dotenv from 'dotenv';
+import express from 'express';
 
 dotenv.config();
 
@@ -317,6 +318,11 @@ async function startRateEngine() {
         // Test blockchain connection
         const blockNumber = await provider.getBlockNumber();
         console.log(`✅ Base L2 connected (block: ${blockNumber})`);
+
+        // Start health check server
+        const app = express();
+        app.get('/health', (_req: any, res: any) => res.json({ status: 'ok', service: 'rate-engine' }));
+        app.listen(3000, () => console.log('🏥 Health check server running on port 3000'));
 
         console.log('🚀 Rate Engine started');
 
