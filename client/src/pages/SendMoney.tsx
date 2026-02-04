@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Globe, ArrowRight, ChevronDown, Zap, ShieldCheck } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight, ChevronDown, Zap, ShieldCheck } from 'lucide-react';
+import Logo from '../components/Logo';
 
 const SendMoney = () => {
     const navigate = useNavigate();
@@ -17,102 +18,98 @@ const SendMoney = () => {
             {/* Navbar */}
             <nav className="fixed w-full z-50 top-0 start-0 border-b border-white/5 bg-[#020617]/80 backdrop-blur-xl px-6">
                 <div className="max-w-7xl mx-auto flex items-center justify-between p-4">
-                    <Link to="/dashboard" className="flex items-center gap-3">
-                        <div className="bg-secondary/15 p-2 rounded-xl border border-secondary/20 group">
-                            <Globe className="text-secondary w-6 h-6 group-hover:rotate-12 transition-transform" />
-                        </div>
-                        <span className="text-xl font-black tracking-tighter text-white uppercase italic">
-                            PILLAR<span className="text-secondary">VALE</span>
-                        </span>
-                    </Link>
-                    <div className="flex items-center gap-4">
-                        <div className="flex -space-x-1">
+                    <Logo />
+                    <div className="flex items-center gap-6">
+                        <div className="flex gap-2">
                             {[1, 2, 3].map(i => (
-                                <div key={i} className={`w-8 h-1 rounded-full ${i === 1 ? 'bg-primary shadow-[0_0_10px_rgba(10,36,99,0.5)]' : 'bg-white/10'}`}></div>
+                                <div key={i} className={`w-10 h-1.5 rounded-full transition-all duration-500 ${i === 1 ? 'bg-primary shadow-[0_0_15px_rgba(10,36,99,0.5)]' : 'bg-white/10'}`}></div>
                             ))}
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Step 1 of 3</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hidden sm:block">Transaction Initialization</span>
                     </div>
                 </div>
             </nav>
 
-            <div className="pt-32 pb-20 px-6 max-w-2xl mx-auto">
-                <div className="space-y-12">
-                    <div className="text-center space-y-4">
-                        <h1 className="text-4xl md:text-6xl font-black tracking-tighter italic uppercase text-white">How much would you like to <span className="text-primary italic">send?</span></h1>
-                        <p className="text-gray-400 font-medium">Get the best real-time FX rates on the blockchain.</p>
+            <div className="pt-40 pb-20 px-6 max-w-3xl mx-auto">
+                <div className="space-y-16">
+                    <div className="text-center space-y-6">
+                        <h1 className="text-5xl md:text-7xl font-black tracking-tighter italic uppercase text-white leading-none">INITIALIZE <span className="text-primary underline decoration-white/10 underline-offset-8">TRANSFER</span></h1>
+                        <p className="text-gray-500 font-bold uppercase tracking-[0.2em] text-[10px]">Real-time blockchain settlement rails</p>
                     </div>
 
-                    <div className="glass-panel p-8 md:p-12 space-y-8 relative overflow-hidden group">
-                        <div className="absolute -top-24 -left-24 w-64 h-64 bg-primary/10 blur-[100px] pointer-events-none group-hover:bg-primary/20 transition-colors"></div>
+                    <div className="glass-panel p-12 md:p-16 space-y-12 relative overflow-hidden group shadow-2xl rounded-[3rem]">
+                        <div className="absolute -top-24 -left-24 w-80 h-80 bg-primary/10 blur-[120px] pointer-events-none group-hover:bg-primary/20 transition-all duration-1000"></div>
 
-                        <div className="space-y-6 relative z-10">
+                        <div className="space-y-8 relative z-10">
                             {/* Send Section */}
-                            <div className="p-6 rounded-[2rem] bg-white/[0.03] border border-white/10 focus-within:border-primary/50 transition-all">
-                                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-4 ml-2">YOU SEND</p>
-                                <div className="flex items-center justify-between gap-4">
+                            <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 focus-within:border-primary/40 focus-within:bg-white/[0.04] transition-all">
+                                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-600 mb-6 ml-2">Debit Infrastructure</p>
+                                <div className="flex items-center justify-between gap-6">
                                     <input
                                         type="text"
                                         value={amount}
                                         onChange={(e) => setAmount(e.target.value)}
-                                        className="bg-transparent border-none text-4xl md:text-5xl font-black text-white focus:outline-none w-full placeholder:text-white/20"
+                                        className="bg-transparent border-none text-6xl md:text-7xl font-black text-white focus:outline-none w-full placeholder:text-white/10 tracking-tighter"
                                         placeholder="0.00"
                                     />
-                                    <button className="flex items-center gap-3 bg-white/5 hover:bg-white/10 p-3 px-4 rounded-2xl border border-white/10 transition-all active:scale-95">
-                                        <span className="font-black text-lg">{sendCurrency}</span>
-                                        <ChevronDown className="w-5 h-5 text-gray-400" />
+                                    <button className="flex items-center gap-4 bg-white/5 hover:bg-white/10 p-4 px-6 rounded-2xl border border-white/10 transition-all active:scale-95 group">
+                                        <span className="font-black text-xl italic">{sendCurrency}</span>
+                                        <ChevronDown className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
                                     </button>
                                 </div>
                             </div>
 
                             {/* Divider with Swap Icon */}
-                            <div className="flex justify-center -my-9 relative z-20">
-                                <div className="bg-[#020617] p-3 rounded-full border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.5)] group">
-                                    <Zap className="w-6 h-6 text-secondary fill-secondary/20" />
+                            <div className="flex justify-center -my-14 relative z-20">
+                                <div className="bg-[#020617] p-4 rounded-full border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.8)] group hover:scale-110 transition-transform">
+                                    <Zap className="w-8 h-8 text-secondary fill-secondary/20 animate-pulse" />
                                 </div>
                             </div>
 
                             {/* Receive Section */}
-                            <div className="p-6 rounded-[2rem] bg-white/[0.03] border border-white/10">
-                                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-4 ml-2">RECIPIENT GETS</p>
-                                <div className="flex items-center justify-between gap-4">
-                                    <span className="text-4xl md:text-5xl font-black text-accent-green">
+                            <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5">
+                                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-600 mb-6 ml-2">Hedged Credit</p>
+                                <div className="flex items-center justify-between gap-6">
+                                    <span className="text-6xl md:text-7xl font-black text-accent-green tracking-tighter">
                                         {(parseFloat(amount || '0') * 127).toLocaleString()}
                                     </span>
-                                    <button className="flex items-center gap-3 bg-white/5 hover:bg-white/10 p-3 px-4 rounded-2xl border border-white/10 transition-all">
-                                        <span className="font-black text-lg">{receiveCurrency}</span>
-                                        <ChevronDown className="w-5 h-5 text-gray-400" />
+                                    <button className="flex items-center gap-4 bg-white/5 hover:bg-white/10 p-4 px-6 rounded-2xl border border-white/10 transition-all">
+                                        <span className="font-black text-xl italic">{receiveCurrency}</span>
+                                        <ChevronDown className="w-5 h-5 text-gray-500" />
                                     </button>
                                 </div>
                             </div>
                         </div>
 
                         {/* FX Details */}
-                        <div className="space-y-3 px-2">
-                            <div className="flex justify-between text-xs font-bold tracking-widest uppercase">
-                                <span className="text-gray-500">Exchange Rate</span>
+                        <div className="space-y-4 px-4">
+                            <div className="flex justify-between text-[10px] font-black tracking-[0.3em] uppercase">
+                                <span className="text-gray-600 italic">Blockchain Liquidity Index</span>
                                 <span className="text-white">1 USD = 127.00 KES</span>
                             </div>
-                            <div className="flex justify-between text-xs font-bold tracking-widest uppercase">
-                                <span className="text-gray-500">Transaction Fee</span>
-                                <span className="text-accent-green">$0.00 (Zero Fee)</span>
+                            <div className="flex justify-between text-[10px] font-black tracking-[0.3em] uppercase">
+                                <span className="text-gray-600 italic">Gas & Network Fee</span>
+                                <span className="text-accent-green italic underline decoration-accent-green/30 underline-offset-4">$0.00 SUBSIDIZED</span>
                             </div>
                         </div>
 
                         <button
                             onClick={handleNext}
-                            className="w-full btn-primary !py-5 !rounded-3xl shadow-[0_20px_50px_rgba(10,36,99,0.3)] group"
+                            className="w-full btn-primary !py-7 !rounded-[2rem] shadow-[0_30px_70px_rgba(10,36,99,0.4)] group overflow-hidden relative border-none"
                         >
-                            Continue to Details
-                            <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                            <span className="relative z-10 flex items-center justify-center gap-4 text-[10px] font-black uppercase tracking-[0.4em]">
+                                Construct Payload Details
+                                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                            </span>
                         </button>
                     </div>
 
                     {/* Trust Indicator */}
-                    <div className="flex flex-col items-center gap-4 py-8 border-t border-white/5">
-                        <div className="flex items-center gap-2 text-gray-500">
+                    <div className="flex flex-col items-center gap-6 py-12 border-t border-white/5">
+                        <div className="flex items-center gap-4 px-8 py-3 rounded-full bg-white/[0.02] border border-white/5">
                             <ShieldCheck className="w-5 h-5 text-accent-green" />
-                            <span className="text-[10px] font-bold uppercase tracking-[0.3em]">SECURE BLOCKCHAIN SETTLEMENT</span>
+                            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-gray-500">End-to-end encrypted settlement</span>
                         </div>
                     </div>
                 </div>
