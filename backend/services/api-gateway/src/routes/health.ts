@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { db, redisClient } from '../server';
+import { db, redisClient } from '../db';
 
 const router = Router();
 

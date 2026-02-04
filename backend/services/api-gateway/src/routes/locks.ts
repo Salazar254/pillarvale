@@ -1,7 +1,7 @@
 import { Router, Response } from 'express';
 import { z } from 'zod';
 import axios from 'axios';
-import { db, redisClient } from '../server';
+import { db, redisClient } from '../db';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { logger } from '../utils/logger';
 
@@ -328,7 +328,7 @@ router.post('/:lockId/execute', authenticate, async (req: AuthRequest, res: Resp
 
         // Initiate M-Pesa STK Push via mpesa-service
         const mpesaServiceUrl = process.env.MPESA_SERVICE_URL || 'http://localhost:3001';
-        
+
         try {
             const mpesaResponse = await axios.post(`${mpesaServiceUrl}/api/v1/mpesa/initiate`, {
                 lockId,

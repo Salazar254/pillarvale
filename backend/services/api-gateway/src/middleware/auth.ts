@@ -7,6 +7,15 @@ if (!JWT_SECRET) {
     throw new Error('FATAL: JWT_SECRET environment variable is not set.');
 }
 
+declare global {
+    namespace Express {
+        interface Request {
+            userId?: string;
+            email?: string;
+        }
+    }
+}
+
 export interface AuthRequest extends Request {
     userId?: string;
     email?: string;

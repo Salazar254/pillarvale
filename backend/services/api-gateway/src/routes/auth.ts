@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
-import { db } from '../server';
+import { db } from '../db';
 import { logger } from '../utils/logger';
 
 const router = Router();
@@ -64,13 +64,13 @@ router.post('/register', async (req: Request, res: Response) => {
         // Generate JWT
         const token = jwt.sign(
             { userId: user.user_id, email: user.email },
-            JWT_SECRET,
-            { expiresIn: JWT_EXPIRY }
+            JWT_SECRET as string,
+            { expiresIn: JWT_EXPIRY as any }
         );
 
         logger.info(`User registered: ${user.email}`);
 
-        res.status(201).json({
+        return res.status(201).json({
             message: 'User registered successfully',
             user: {
                 userId: user.user_id,
@@ -149,13 +149,13 @@ router.post('/login', async (req: Request, res: Response) => {
         // Generate JWT
         const token = jwt.sign(
             { userId: user.user_id, email: user.email },
-            JWT_SECRET,
-            { expiresIn: JWT_EXPIRY }
+            JWT_SECRET as string,
+            { expiresIn: JWT_EXPIRY as any }
         );
 
         logger.info(`User logged in: ${user.email}`);
 
-        res.json({
+        return res.json({
             message: 'Login successful',
             user: {
                 userId: user.user_id,
