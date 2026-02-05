@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/sender-details" element={<SenderDetails />} />
                 <Route path="/receiver-details" element={<ReceiverDetails />} />
             </Routes>
+            <SpeedInsights />
         </Router>
     );
 }
